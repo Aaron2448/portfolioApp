@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.marinaldo.dto.ProjectsDTO;
 import com.marinaldo.model.Prediction;
 import com.marinaldo.model.UserInfo;
 import com.marinaldo.repository.PredictionRepository;
@@ -96,15 +98,17 @@ public class PredictionController {
     
     }
     
-    static String regex = "([0-9]\\.|[0-9][0-9]\\.|0[0-9][0-9]\\.|1[0-9][0-9]\\.|2[0-5][0-5]\\.|2[0-4][0-9]\\.|25[0-5]\\.){3}([0-9]$|[0-9][0-9]$|0[0-9][0-9]$|1[0-9][0-9]$|2[0-5][0-5]$|2[0-4][0-9]$|25[0-5]$).*";
-	static Pattern pattern = Pattern.compile(regex); 
+
   
     @PostMapping("/checkIp")
-    public String checkThisIp(@RequestBody UserInfo userInfo) {
+    public String checkThisIp(@RequestBody ProjectsDTO projectsDTO) {
         
-    	    Matcher matcher = pattern.matcher(userInfo.getName());	
+    	String regex = "([0-9]\\.|[0-9][0-9]\\.|0[0-9][0-9]\\.|1[0-9][0-9]\\.|2[0-5][0-5]\\.|2[0-4][0-9]\\.|25[0-5]\\.){3}([0-9]$|[0-9][0-9]$|0[0-9][0-9]$|1[0-9][0-9]$|2[0-5][0-5]$|2[0-4][0-9]$|25[0-5]$).*";
+    	Pattern pattern = Pattern.compile(regex); 
+    	
+    	    Matcher matcher = pattern.matcher(projectsDTO.getIpAddress());	
 	        boolean matchFound = matcher.find();
-	    	System.out.println(userInfo.getName());
+	    	System.out.println(projectsDTO.getIpAddress());
 	        
 	        
 		    if(matchFound) {

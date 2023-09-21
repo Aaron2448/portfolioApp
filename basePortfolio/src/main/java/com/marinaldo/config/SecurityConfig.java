@@ -52,9 +52,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     	return http.cors().and().csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/user/authenticate", "/api/v1/user/register", "/api/v1/prediction/checkIp", "/api/v1/user/logout", "/api/v1/user/getProfile").permitAll()
+                .requestMatchers("/api/v1/user/authenticate", "/api/v1/user/register", "/api/v1/prediction/checkIp", "/api/v1/user/logout", "/api/v1/user/conway", "/api/v1/code/validate/key").permitAll()
                 .and()
-                .authorizeHttpRequests().requestMatchers("/apo").authenticated()
+                .authorizeHttpRequests().requestMatchers("/api/v1/user/getProfile","/api/v1/code/generate/**").authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

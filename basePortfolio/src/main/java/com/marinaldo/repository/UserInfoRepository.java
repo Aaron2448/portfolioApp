@@ -11,4 +11,6 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Integer>{
 	@Query(nativeQuery = true, value = "SELECT email FROM portfolio_user_info WHERE email = ?1")
     String doesUserEmailAlreadyExist(String email);
 
+	boolean existsByEmail(String email);
+	
 }

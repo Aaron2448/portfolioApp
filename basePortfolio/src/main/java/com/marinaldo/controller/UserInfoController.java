@@ -1,5 +1,10 @@
 package com.marinaldo.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,11 +17,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.marinaldo.dto.AuthRequest;
+import com.marinaldo.dto.ProjectsDTO;
 import com.marinaldo.model.UserInfo;
 import com.marinaldo.repository.UserInfoRepository;
 import com.marinaldo.service.JwtService;
@@ -30,6 +37,8 @@ import jakarta.servlet.http.HttpServletResponse;
 @RequestMapping("/api/v1/user")
 public class UserInfoController {
 
+	
+	
 	@Autowired
 	private UserInfoService userInfoService;
 	
@@ -53,6 +62,9 @@ public class UserInfoController {
 	@PostMapping("/authenticate")
 	public String authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
 		
+		
+        
+		
 		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())); 
 			
 		if(authentication.isAuthenticated()) {
@@ -67,6 +79,16 @@ public class UserInfoController {
 		
 	}
 
+    @PostMapping("/updatePassword")
+    public String updatePassword(@RequestBody UserInfo userInfo) {
+    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    	if (authentication != null) {
+    		userInfoService.updatePassword(userInfo);
+    		return jwtService.generateToken(userInfo.getEmail());
+        }
+    	return "Updating password requires authentication";
+    }
+	
    	@GetMapping("/getProfile")
     public ResponseEntity<UserInfo> getUserProfile(@AuthenticationPrincipal UserInfo userInfo) {
        	System.out.println("Start of getProfile method"); 
@@ -74,7 +96,7 @@ public class UserInfoController {
         String currentUserName = authentication.getName();
         System.out.println("controller method called getProfile " + currentUserName);
         UserInfo currentUserDto = userInfoRepo.findByEmail(currentUserName);
-
+       
         return ResponseEntity.ok(currentUserDto);
     }
 
@@ -90,5 +112,16 @@ public class UserInfoController {
        
         return ResponseEntity.ok("No user to log out.");
     }
+    
+    
+    @PostMapping("/conway")
+    public String initiateConwayMethod(@RequestBody ProjectsDTO projectsDTO) {
+    	return userInfoService.initiateConway(projectsDTO.getCellCoordinates());
+    }
+  
+    	
+    	
+    
+    
 	  
 }

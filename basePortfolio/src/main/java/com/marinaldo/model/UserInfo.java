@@ -29,6 +29,10 @@ public class UserInfo {
 	private String password;
 	
 	private String roles = "ROLE_USER";
+	
+	private boolean use2FA;
+	    
+	private String resetRecently = "no";
 
 	public Object map(Object object) {
 		// TODO Auto-generated method stub
